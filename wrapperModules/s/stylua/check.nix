@@ -10,7 +10,6 @@ let
     isDirectory
     isFile
     notIsFile
-    areEqual
     test
     ;
   default = self.wrappers.stylua.wrap {
