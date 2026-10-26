@@ -45,9 +45,7 @@
           enable = lib.mkEnableOption ''
             generating a copy script.
 
-            If you don't add `customStyle`, the script will of cause copy nothing.
-            But you can use the `-i|--add-doc` option to generate one with only
-            documentation added.
+            If you don't add `customStyle`, the script will instead exit with a warning.
           '';
           name = lib.mkOption {
             type = lib.types.str;
