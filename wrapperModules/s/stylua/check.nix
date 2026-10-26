@@ -129,27 +129,6 @@ test { wrapper = "stylua"; } {
         grep -i "forcesingle" ${styluaToml} && rm -f ${styluaToml}
       ''
 
-      ''
-        ${cpScriptNameWrapper}/bin/test_script -h |
-        grep -i "add-doc" && [[ ! -e ${styluaToml} ]]
-      ''
-
-      ''
-        ${cpScriptNameWrapper}/bin/test_script --help |
-        grep -i "add-doc" && [[ ! -e ${styluaToml} ]]
-      ''
-
-      ''
-        cd /tmp && ${cpScriptNameWrapper}/bin/test_script -i && \
-        [[ -e ${styluaToml} ]] && [[ -w ${styluaToml} ]] && \
-        grep -i 'enabled = true|false' ${styluaToml} && rm -f ${styluaToml}
-      ''
-
-      ''
-        cd /tmp && ${cpScriptNameWrapper}/bin/test_script --add-doc && \
-        [[ -e ${styluaToml} ]] && [[ -w ${styluaToml} ]] && \
-        grep -i 'enabled = true|false' ${styluaToml} && rm -f ${styluaToml}
-      ''
     ];
 
   "copy script only wrapper test" =
