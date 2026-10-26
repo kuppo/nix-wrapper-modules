@@ -94,7 +94,7 @@ test { wrapper = "stylua"; } {
       (isFile "${cpScriptWrapper}/${styluaFile}")
       (fileContains "${cpScriptWrapper}/${styluaFile}" "${styluaTomlContent}")
       (isFile "${cpScriptWrapper}/bin/cp_stylua_toml")
-      (fileContains "${cpScriptWrapper}/bin/cp_stylua_toml" "bin/sh")
+      (fileContains "${cpScriptWrapper}/bin/cp_stylua_toml" "bin/bash")
 
       ''
         cd /tmp && ${cpScriptWrapper}/bin/cp_stylua_toml && cat stylua.toml && rm -f ${styluaToml}
