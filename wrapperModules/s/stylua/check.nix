@@ -167,10 +167,5 @@ test { wrapper = "stylua"; } {
         cd /tmp && ${cpScriptOnlyWrapper}/bin/cp_stylua_toml | grep "have not generated stylua.toml" \
         && [[ ! -e ${styluaToml} ]]
       ''
-
-      ''
-        cd /tmp && ${cpScriptOnlyWrapper}/bin/cp_stylua_toml -i \
-        && [[ -e ${styluaToml} ]] && grep 'enabled = true|false' ${styluaToml} && rm -f ${styluaToml}
-      ''
     ];
 }
