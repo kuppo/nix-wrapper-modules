@@ -79,7 +79,9 @@
             #!${pkgs.bash}${pkgs.bash.shellPath}
             help=$'cp_stylua_toml [-h|--help] [-f] [-p] <DIR>\nCopy generated stylua.toml to a target directory (defaults to the current directory).\n\nOptions:\n\t-f  :  Overwrite the target destination if it exists\n\t-p  :  Create target directory if it does not exist'
 
-            source=${placeholder config.constructFiles.generatedConfig.output or config.outputName}/styles/stylua.toml
+            source=${
+              placeholder config.constructFiles.generatedConfig.output or config.outputName
+            }/styles/stylua.toml
             dir=$(pwd)
             force=0
             mkdirp=0
