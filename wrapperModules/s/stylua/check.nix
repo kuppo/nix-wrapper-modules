@@ -143,7 +143,7 @@ test { wrapper = "stylua"; } {
       (notIsFile "${cpScriptOnlyWrapper}/${styluaFile}")
 
       ''
-        cd /tmp && ${cpScriptOnlyWrapper}/bin/cp_stylua_toml | grep "have not generated stylua.toml" \
+        cd /tmp && ${cpScriptOnlyWrapper}/bin/cp_stylua_toml | grep "does not define any stylua.toml configuration" \
         && [[ ! -e ${styluaToml} ]]
       ''
     ];
