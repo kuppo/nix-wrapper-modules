@@ -121,7 +121,7 @@ test { wrapper = "stylua"; } {
       (isFile "${cpScriptNameWrapper}/${styluaFile}")
       (fileContains "${cpScriptNameWrapper}/${styluaFile}" "${styluaTomlContent}")
       (isFile "${cpScriptNameWrapper}/bin/test_script")
-      (fileContains "${cpScriptNameWrapper}/bin/test_script" "bin/sh")
+      (fileContains "${cpScriptNameWrapper}/bin/test_script" "bin/bash")
 
       ''
         cd /tmp && ${cpScriptNameWrapper}/bin/test_script && \
