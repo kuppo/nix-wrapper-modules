@@ -39,8 +39,6 @@
         settings into `$CWD` for further customization.
 
         The script's name can be customized.
-        With the `-i|--add-doc` option, it will add the configuraiton
-        documentation to the end of the copied file.
       '';
       type = lib.types.submodule {
         options = {
