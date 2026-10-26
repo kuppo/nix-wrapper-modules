@@ -76,27 +76,58 @@
           relPath = "bin/${baseNameOf config.generateCpScript.name}";
           builder = "cp $1 $2 && chmod +x $2";
           content = ''
-            #!${pkgs.bash}/bin/sh
-            help=$'cp_stylua_toml [-h|--help|-i|--add-doc]\nCopy stylua files.\nOptions:\n\t-h|--help\tPrint this help\n\t-i|--add-doc\tAdd the configuration doccumentation to the end of the stylua.toml'
+            #!${pkgs.bash}${pkgs.bash.shellPath}
+            help=$'cp_stylua_toml [-h|--help] [-f] [-p] <DIR>\nCopy generated stylua.toml to a target directory (defaults to the current directory).\n\nOptions:\n\t-f  :  Overwrite the target destination if it exists\n\t-p  :  Create target directory if it does not exist'
 
-            target=$(pwd)/stylua.toml
-            source=${placeholder config.outputName}/styles/stylua.toml
+            source=${placeholder config.constructFiles.generatedConfig.output}/styles/stylua.toml
+            dir=$(pwd)
+            force=0
+            mkdirp=0
 
-            doc=$(${placeholder config.outputName}/bin/stylua --help \
-            | ${pkgs.gawk}/bin/awk '/^FORMATTING OPTIONS:/{f=1;next}f{sub(/^[[:space:]]*/,"");if($0=="")next;sub(/^--/,"** ");gsub(/ *<[^>]*>/,"");gsub(/-/,"_");if($0=="Enable requires sorting")$0=$0" [enabled = true|false]";if(/^\*\*/)printf "\n";print "# "$0}')
+            while [ "$#" -gt 0 ]; do
+              case "$1" in
+                -h|--help)
+                  echo "$help"
+                  exit 0
+                  ;;
+                -f)
+                  force=1
+                  ;;
+                -p)
+                  mkdirp=1
+                  ;;
+                -pf|-fp)
+                  mkdirp=1
+                  force=1
+                  ;;
+                *)
+                  dir="$1"
+                  break
+                  ;;
+              esac
+              shift
+            done
 
-            if [ "$#" -ne 1 ]; then
-              [[ ! -e "$source" ]] \
-              && echo "You have not generated stylua.toml. You can use -i|--add-doc option to add a stylua.toml with only documentation included." \
-              && exit 0
-              cp -f "$source" "$target" && chmod u+w "$target"
-            elif [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
-              echo "$help"
-              exit 0
-            elif [ "$1" == "-i" ] || [ "$1" == "--add-doc" ]; then
-              [[ -e "$source" ]] && cp -f "$source" "$target"
-              touch "$target" && chmod u+w "$target" && echo "$doc" >> "$target"
+            [ ! -e "$source" ] \
+            && echo "The associated wrapper module for this wrapped stylua binary does not define any stylua.toml configuration." \
+            && exit 0
+
+            target="$dir/stylua.toml"
+
+            if [ "$mkdirp" -eq 1 ]; then
+              mkdir -p "$dir" || { echo "failed to create directory $dir! exiting..." >&2; exit 1; };
+            elif [ ! -d "$dir" ]; then
+              echo "Target directory '$dir' does not exist. Use -p to create it."
+              exit 1
             fi
+
+            if [ -e "$target" ] && [ "$force" -ne 1 ]; then
+              echo "$target already exists. Use -f to overwrite it."
+              exit 1
+            fi
+
+            touch "$target"
+            cat "$source" > "$target"
           '';
         };
     flags."--config-path" = lib.mkIf (
